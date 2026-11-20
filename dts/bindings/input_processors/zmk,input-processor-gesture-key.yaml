@@ -1,0 +1,39 @@
+description: |
+  Input processor that converts relative input events into behavior invocations
+  with either once-per-gesture or distance-based repeat semantics, resetting on
+  touch release or idle timeout.
+
+compatible: "zmk,input-processor-gesture-key"
+
+properties:
+  "#input-processor-cells":
+    type: int
+    const: 0
+
+  event-code:
+    type: int
+    required: true
+    description: Relative input event code to match (e.g. INPUT_REL_X, INPUT_REL_WHEEL).
+
+  bindings:
+    type: phandle-array
+    required: true
+    description: Two behaviors [negative-direction, positive-direction].
+
+  distance:
+    type: int
+    default: 10
+    description: Cumulative delta units required to trigger one invocation.
+
+  fire-once:
+    type: boolean
+    description: Fire at most once per touch gesture until touch release or idle reset.
+
+  idle-reset-ms:
+    type: int
+    default: 500
+    description: Milliseconds of inactivity after which accumulated state resets (0 disables).
+
+  track-remainders:
+    type: boolean
+    description: Required by ZMK input_listener macro; unused by this processor.

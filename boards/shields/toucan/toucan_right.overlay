@@ -66,7 +66,6 @@
         filter-settings=<0x0B>;
         hold-time = <500>;
 
-        zoom;
         scroll;
         two-finger-tap;
         single-tap;

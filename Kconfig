@@ -1,0 +1,7 @@
+config ZMK_INPUT_PROCESSOR_GESTURE_KEY
+    bool "Enable gesture-key input processor"
+    default y
+    depends on ZMK_POINTING
+    help
+      Enable input processor that maps relative motion to behaviors with
+      once-per-gesture or distance-based repeat modes.
