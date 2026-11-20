@@ -194,22 +194,22 @@
 
         ctrl_shift {
             bindings = <&kp LC(RIGHT_SHIFT)>;
-            key-positions = <36 41>;
+            key-positions = <37 40>;
         };
 
         ctrl_gui {
             bindings = <&kp LC(RIGHT_GUI)>;
-            key-positions = <36 40>;
+            key-positions = <37 39>;
         };
 
         alt_gui {
             bindings = <&kp LA(RIGHT_GUI)>;
-            key-positions = <37 40>;
+            key-positions = <38 39>;
         };
 
         alt_shift {
             bindings = <&kp LA(RIGHT_SHIFT)>;
-            key-positions = <37 41>;
+            key-positions = <38 40>;
         };
     };
 
