@@ -34,7 +34,7 @@
             distance = <L2_SWIPE_DISTANCE>;
             fire-once;
             idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
-            bindings = <&kp LC(LG(LEFT_ARROW))>, <&kp LC(LG(RIGHT_ARROW))>;
+            bindings = <&kp LC(LG(RIGHT_ARROW))>, <&kp LC(LG(LEFT_ARROW))>;
         };
 
         zip_l2_vswipe: zip_l2_vswipe {
