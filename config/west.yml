@@ -21,9 +21,6 @@ manifest:
     - name: zmk_driver_azoteq
       remote: beekeeb
       revision: main
-    - name: zmk-input-zoom
-      remote: beekeeb
-      revision: main
     - name: zmk-input-processor-axis-constrain
       remote: matchey
       revision: v0.2.0

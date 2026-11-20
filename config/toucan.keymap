@@ -7,27 +7,111 @@
 
 // Layers mirror zmk-config-mtk64 (same indices) on the shared (3x6 + 3) x 2 keys.
 // RA(RIGHT_CONTROL) stands for mtk64's RC(RIGHT_ALT): RC() collides with the matrix-transform macro.
-// Temporary trackpad setup: no layer switch on touch; one-finger scroll while CTC (2) is held;
-// slow, horizontal/vertical-only pointer while SNP (4) is held.
+// Trackpad setup: AML (Layer 7) while touching (except CTC/SMB); CTC (2) 1-finger scroll + 2-finger
+// window/desktop shortcuts; SNP (4) cardinal slow pointer + half-speed 2-finger scroll;
+// SMB (5) 1-finger horizontal MB5/MB4 (once) + vertical PG_DN/PG_UP (long-step repeat).
+
+#define L2_SWIPE_DISTANCE 60
+#define L5_HSWIPE_DISTANCE 150
+#define L5_VPAGE_DISTANCE 300
+#define GESTURE_IDLE_RESET_MS 500
 
 &zip_axis_constrain {
     axis-lock-threshold = <10>;
     axis-tolerance-deg = <30>;
 };
 
+&is_touching_processor {
+    bindings = <&mo 7>;
+};
+
+/ {
+    input_processors {
+        zip_l2_hswipe: zip_l2_hswipe {
+            compatible = "zmk,input-processor-gesture-key";
+            #input-processor-cells = <0>;
+            event-code = <INPUT_REL_HWHEEL>;
+            distance = <L2_SWIPE_DISTANCE>;
+            fire-once;
+            idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
+            bindings = <&kp LG(LEFT)>, <&kp LG(RIGHT)>;
+        };
+
+        zip_l2_vswipe: zip_l2_vswipe {
+            compatible = "zmk,input-processor-gesture-key";
+            #input-processor-cells = <0>;
+            event-code = <INPUT_REL_WHEEL>;
+            distance = <L2_SWIPE_DISTANCE>;
+            fire-once;
+            idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
+            bindings = <&kp LG(TAB)>, <&kp LG(TAB)>;
+        };
+
+        zip_l5_axis_constrain: zip_l5_axis_constrain {
+            compatible = "zmk,input-processor-axis-constrain";
+            #input-processor-cells = <0>;
+            axis-lock-threshold = <10>;
+            axis-tolerance-deg = <30>;
+            track-remainders;
+        };
+
+        zip_l5_hswipe: zip_l5_hswipe {
+            compatible = "zmk,input-processor-gesture-key";
+            #input-processor-cells = <0>;
+            event-code = <INPUT_REL_X>;
+            distance = <L5_HSWIPE_DISTANCE>;
+            fire-once;
+            idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
+            bindings = <&mkp MB5>, <&mkp MB4>;
+        };
+
+        zip_l5_vpage: zip_l5_vpage {
+            compatible = "zmk,input-processor-gesture-key";
+            #input-processor-cells = <0>;
+            event-code = <INPUT_REL_Y>;
+            distance = <L5_VPAGE_DISTANCE>;
+            idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
+            bindings = <&kp PG_DN>, <&kp PG_UP>;
+        };
+    };
+};
+
 &trackpad_listener {
     input-processors =
         <&zip_xy_scaler 100 100>,
         <&zip_scroll_scaler 1 20>,
-        <&zip_zoom_mapper>,
+        <&is_touching_processor>,
         <&swipe_button_mapper>;
 
-    scroller { layers = <2>; };
+    // Place 2-finger gesture mappers before zip_xy_to_scroll_mapper so 1-finger scroll is untouched.
+    scroller {
+        layers = <2>;
+        input-processors =
+            <&zip_l2_hswipe>,
+            <&zip_l2_vswipe>,
+            <&zip_xy_to_scroll_mapper>,
+            <&zip_scroll_scaler 1 20>,
+            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>,
+            <&swipe_button_mapper>;
+    };
 
-    // process-next keeps zoom and swipe gestures working on the SNP layer.
+    page_nav {
+        layers = <5>;
+        input-processors =
+            <&zip_l5_axis_constrain>,
+            <&zip_l5_hswipe>,
+            <&zip_l5_vpage>,
+            <&zip_scroll_scaler 1 20>,
+            <&swipe_button_mapper>;
+    };
+
+    // process-next keeps AML and 3-finger swipe working on the SNP layer; halves 2-finger scroll.
     cardinal_snipe {
         layers = <4>;
-        input-processors = <&zip_axis_constrain>, <&zip_xy_scaler 1 5>;
+        input-processors =
+            <&zip_axis_constrain>,
+            <&zip_xy_scaler 1 5>,
+            <&zip_scroll_scaler 1 2>;
         process-next;
     };
 };
