@@ -6,7 +6,7 @@
 
 - **Keymap & trackpad gestures**: [config/toucan.keymap](config/toucan.keymap)
   - Windows mode (`TOUCAN_WIN_MODE`) enabled; pinch zoom disabled.
-  - Automouse activates Layer 7 (`AML`) while touching the trackpad (skipped on Layer 2 `CTC` and Layer 5 `SMB`).
+  - Automouse activates Layer 7 (`AML`) while touching the trackpad (skipped on Layer 2 `CTC` and Layer 5 `SMB`). Touch release on `CTC`/`SMB` still clears `AML` via the custom `&layer_off` behavior.
   - Layer 2 (`CTC`): 1-finger 2D scroll; 2-finger swipe (once) sends up/down `LG(TAB)`, right `LC(LG(LEFT_ARROW))`, left `LC(LG(RIGHT_ARROW))` (content follows fingers).
   - Layer 4 (`SNP`): axis-constrained 1/5 cursor speed and halved 2-finger scroll.
   - Layer 5 (`SMB`): 1-finger horizontal swipe (once) sends `MB5` (left) / `MB4` (right); vertical swipe repeats `PG_DN` (up) / `PG_UP` (down).

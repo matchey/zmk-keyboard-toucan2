@@ -5,3 +5,8 @@ config ZMK_INPUT_PROCESSOR_GESTURE_KEY
     help
       Enable input processor that maps relative motion to behaviors with
       once-per-gesture or distance-based repeat modes.
+
+config ZMK_BEHAVIOR_LAYER_OFF
+    bool
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_LAYER_OFF_ENABLED
