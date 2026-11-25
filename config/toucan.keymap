@@ -1,9 +1,9 @@
+#include <axis-constrain.dtsi>
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
-#include <axis-constrain.dtsi>
 
 // Layers mirror zmk-config-mtk64 (same indices) on the shared (3x6 + 3) x 2 keys.
 // RA(RIGHT_CONTROL) stands for mtk64's RC(RIGHT_ALT): RC() collides with the matrix-transform macro.
@@ -21,9 +21,7 @@
     axis-tolerance-deg = <30>;
 };
 
-&is_touching_processor {
-    bindings = <&mo 7>;
-};
+&is_touching_processor { bindings = <&mo 7>; };
 
 / {
     input_processors {
@@ -34,7 +32,7 @@
             distance = <L2_SWIPE_DISTANCE>;
             fire-once;
             idle-reset-ms = <GESTURE_IDLE_RESET_MS>;
-            bindings = <&kp LG(LEFT)>, <&kp LG(RIGHT)>;
+            bindings = <&kp LC(LG(RIGHT_ARROW))>, <&kp LC(LG(LEFT_ARROW))>;
         };
 
         zip_l2_vswipe: zip_l2_vswipe {
@@ -84,6 +82,7 @@
         <&swipe_button_mapper>;
 
     // Place 2-finger gesture mappers before zip_xy_to_scroll_mapper so 1-finger scroll is untouched.
+
     scroller {
         layers = <2>;
         input-processors =
@@ -106,12 +105,14 @@
     };
 
     // process-next keeps AML and 3-finger swipe working on the SNP layer; halves 2-finger scroll.
+
     cardinal_snipe {
         layers = <4>;
         input-processors =
             <&zip_axis_constrain>,
             <&zip_xy_scaler 1 5>,
             <&zip_scroll_scaler 1 2>;
+
         process-next;
     };
 };
@@ -194,22 +195,22 @@
 
         ctrl_shift {
             bindings = <&kp LC(RIGHT_SHIFT)>;
-            key-positions = <36 41>;
+            key-positions = <37 40>;
         };
 
         ctrl_gui {
             bindings = <&kp LC(RIGHT_GUI)>;
-            key-positions = <36 40>;
+            key-positions = <37 39>;
         };
 
         alt_gui {
             bindings = <&kp LA(RIGHT_GUI)>;
-            key-positions = <37 40>;
+            key-positions = <38 39>;
         };
 
         alt_shift {
             bindings = <&kp LA(RIGHT_SHIFT)>;
-            key-positions = <37 41>;
+            key-positions = <38 40>;
         };
     };
 
@@ -379,10 +380,10 @@
         automouse {
             display-name = "AML";
             bindings = <
-&trans  &trans  &trans  &trans  &mkp MCLK         &trans        &trans                  &mkp MCLK       &kp LG(TAB)  &trans                   &mkp MB4  &trans
-&trans  &trans  &trans  &trans  &mkp LCLK         &trans        &kp LC(LG(LEFT_ARROW))  &mkp LCLK       &mkp RCLK    &kp LC(LG(RIGHT_ARROW))  &trans    &trans
-&trans  &trans  &trans  &trans  &trans            &trans        &mkp MB5                &trans          &trans       &trans                   &trans    &trans
-                        &trans  &kp LEFT_CONTROL  &kp LEFT_ALT  &kp RIGHT_GUI           &kp LEFT_SHIFT  &trans
+&trans  &trans  &trans   &trans  &mkp MCLK         &trans        &trans                  &mkp MCLK       &kp LG(TAB)  &trans                   &mkp MB4  &trans
+&trans  &trans  &kp TAB  &trans  &mkp LCLK         &trans        &kp LC(LG(LEFT_ARROW))  &mkp LCLK       &mkp RCLK    &kp LC(LG(RIGHT_ARROW))  &trans    &trans
+&trans  &trans  &trans   &trans  &trans            &trans        &mkp MB5                &trans          &trans       &trans                   &trans    &trans
+                         &trans  &kp LEFT_CONTROL  &kp LEFT_ALT  &kp RIGHT_GUI           &kp LEFT_SHIFT  &trans
             >;
         };
 
