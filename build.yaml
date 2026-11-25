@@ -25,5 +25,11 @@ include:
     cmake-args: -DCONFIG_ZMK_STUDIO=y
   - board: seeeduino_xiao_ble
     shield: toucan_right rgbled_adapter
+  # Debug build: USB log of trackpad touch up/down and I2C errors (tps43 driver logs at INF).
+  - board: seeeduino_xiao_ble
+    shield: toucan_right rgbled_adapter
+    snippet: zmk-usb-logging
+    cmake-args: -DCONFIG_INPUT_LOG_LEVEL_INF=y
+    artifact-name: toucan_right_usb_logging
   - board: seeeduino_xiao_ble
     shield: settings_reset
