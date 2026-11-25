@@ -15,16 +15,25 @@
 #define L5_HSWIPE_DISTANCE 150
 #define L5_VPAGE_DISTANCE 300
 #define GESTURE_IDLE_RESET_MS 500
+#define AML_LAYER 7
 
 &zip_axis_constrain {
     axis-lock-threshold = <10>;
     axis-tolerance-deg = <30>;
 };
 
-&is_touching_processor { bindings = <&mo 7>; };
+&is_touching_processor { bindings = <&mo AML_LAYER>; };
 
 / {
     input_processors {
+        // CTC/SMB overrides skip is_touching_processor, so a touch released after switching into them
+        // would leave AML on; this clears AML on either touch edge there without ever entering it.
+        aml_off_on_touch: aml_off_on_touch {
+            compatible = "zmk,input-processor-behaviors";
+            #input-processor-cells = <0>;
+            codes = <INPUT_BTN_TOUCH>;
+            bindings = <&layer_off AML_LAYER>;
+        };
         zip_l2_hswipe: zip_l2_hswipe {
             compatible = "zmk,input-processor-gesture-key";
             #input-processor-cells = <0>;
@@ -91,7 +100,8 @@
             <&zip_xy_to_scroll_mapper>,
             <&zip_scroll_scaler 1 20>,
             <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>,
-            <&swipe_button_mapper>;
+            <&swipe_button_mapper>,
+            <&aml_off_on_touch>;
     };
 
     page_nav {
@@ -101,7 +111,8 @@
             <&zip_l5_hswipe>,
             <&zip_l5_vpage>,
             <&zip_scroll_scaler 1 20>,
-            <&swipe_button_mapper>;
+            <&swipe_button_mapper>,
+            <&aml_off_on_touch>;
     };
 
     // process-next keeps AML and 3-finger swipe working on the SNP layer; halves 2-finger scroll.
@@ -119,6 +130,12 @@
 
 / {
     behaviors {
+        layer_off: layer_off {
+            compatible = "zmk,behavior-layer-off";
+            #binding-cells = <1>;
+            display-name = "Layer Off";
+        };
+
         double_tap_semi_colon: double_tap_semi_colon {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;

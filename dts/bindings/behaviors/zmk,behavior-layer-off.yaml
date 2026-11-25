@@ -1,0 +1,8 @@
+description: |
+  Deactivates the given layer on both press and release, without ever activating it.
+  Lets a release-only event (e.g. trackpad touch release) clear a momentary layer
+  whose press was handled elsewhere.
+
+compatible: "zmk,behavior-layer-off"
+
+include: one_param.yaml
